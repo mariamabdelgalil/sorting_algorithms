@@ -1,5 +1,19 @@
 #include "sort.h"
 
+
+/**
+ * swap - Swap two integers in an array.
+ * @a: The first integer to swap.
+ * @b: The second integer to swap.
+ */
+void swap(int *a, int *b)
+{
+	int tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
 /**
  * partition2 - partition
  * @array: array
@@ -10,26 +24,26 @@
  */
 int partition2(int *array, int lo, int hi, size_t size)
 {
-	int i = lo - 1, j = hi + 1;
-	int pivot = array[hi], temp = 0;
+	int pivot, above, below;
 
-	while (1) {
-        	do {
-            	i++;
-        	} while (array[i] < pivot);
+	pivot = array[right];
+	for (above = lo - 1, below = hi + 1; above < below;)
+	{
+		do {
+			above++;
+		} while (array[above] < pivot);
+		do {
+			below--;
+		} while (array[below] > pivot);
 
-       		do {
-            	j--;
-        	} while (array[j] > pivot);
+		if (above < below)
+		{
+			swap(array + above, array + below);
+			print_array(array, size);
+		}
+	}
 
-        	if (i >= j)
-            		return j;
-		temp = array[j];
-		array[j] = array[i];
-		array[i] = temp;
-		print_array(array, size);
-    	}
-	return (i);
+	return (above);
 }
 
 /**
