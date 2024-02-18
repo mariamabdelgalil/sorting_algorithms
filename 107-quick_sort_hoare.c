@@ -1,14 +1,14 @@
 #include "sort.h"
 
 /**
- * partition - partition
+ * partition2 - partition
  * @array: array
  * @lo: lower
  * @hi: higher
  * @size: array's size
  * Return: i
  */
-int partition(int *array, int lo, int hi, size_t size)
+int partition2(int *array, int lo, int hi, size_t size)
 {
 	int i = lo - 1, j = hi + 1;
 	int pivot = array[hi], temp = 0;
@@ -33,22 +33,22 @@ int partition(int *array, int lo, int hi, size_t size)
 }
 
 /**
- * quick_sort_helper - quick sort helper
+ * quick_sort_helper2 - quick sort helper
  * @array: given array
  * @lo: lower
  * @hi:higher
  * @size: array's size
  * Return: void
  */
-void quick_sort_helper(int *array, int lo, int hi, size_t size)
+void quick_sort_helper2(int *array, int lo, int hi, size_t size)
 {
 	int pivot;
 
 	if (lo < hi)
 	{
-		pivot = partition(array, lo, hi, size);
-		quick_sort_helper(array, lo, pivot - 1, size);
-		quick_sort_helper(array, pivot, hi, size);
+		pivot = partition2(array, lo, hi, size);
+		quick_sort_helper2(array, lo, pivot - 1, size);
+		quick_sort_helper2(array, pivot, hi, size);
 	}
 }
 
@@ -67,5 +67,5 @@ void quick_sort_hoare(int *array, size_t size)
 	if (array == NULL || size < 2)
 		return;
 
-	quick_sort_helper(array, size, 0, size - 1);
+	quick_sort_helper2(array, size, 0, size - 1);
 }
