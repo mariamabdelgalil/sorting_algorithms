@@ -26,7 +26,7 @@ int partition2(int *array, int lo, int hi, size_t size)
 {
 	int pivot, above, below;
 
-	pivot = array[right];
+	pivot = array[hi];
 	for (above = lo - 1, below = hi + 1; above < below;)
 	{
 		do {
