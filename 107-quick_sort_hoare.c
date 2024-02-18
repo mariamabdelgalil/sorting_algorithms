@@ -49,7 +49,7 @@ void quick_sort_helper(int *array, int lo, int hi, size_t size)
 	{
 		pivot = partition(array, lo, hi, size);
 		quick_sort_helper(array, lo, pivot - 1, size);
-		quick_sort_helper(array, pivot + 1, hi, size);
+		quick_sort_helper(array, pivot, hi, size);
 	}
 }
 
