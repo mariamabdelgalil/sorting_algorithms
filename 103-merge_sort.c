@@ -1,5 +1,6 @@
 #include "sort.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * merge_sort - Write a function that sorts an array
@@ -63,6 +64,7 @@ void merge_rec(int *array, int low, int high, int *temp_buffer)
 	}
 }
 
+
 /**
  * merge_array - Integrates two sorted subarrays into one sorted array
  * @array: The main array containing the subarrays to be combined
@@ -70,49 +72,54 @@ void merge_rec(int *array, int low, int high, int *temp_buffer)
  * @midIndex: Index separating the first and second subarray
  * @highIndex: Index at which the second subarray ends
  * @buffer: Temporary array used for merging elements
+ * ================================
+ * leftCursor, rightCursor, mergeCursor		= Cursors for L & R merged arrays
+ * leftTempSize, rightTempSize				= Sizes of left & right temporary arrays
+ * debugIdx									= Index used for debugging output
+ * leftTempArray[2048], rightTempArray[2048] = Temporary arrays for L & R
  */
 
 void merge_array(int *array, int lowIndex,
 int midIndex, int highIndex, int *buffer)
-{	/* Cursors for left, right, and merged arrays */
-	int leftCursor, rightCursor, mergeCursor;
-	int leftTempSize, rightTempSize;				/*Sizes of left & right temporary arrays*/
-	int debugIdx;									/* Index used for debugging output */
-	int leftTempArray[2048], rightTempArray[2048];	/*Temporary arrays for L & R*/
+{	int leftCursor, rightCursor, mergeCursor, leftTempSize, rightTempSize;
+	int debugIdx, leftTempArray[2048], rightTempArray[2048];
 	/* Initialize indices and sizes */
 	leftCursor = lowIndex, rightCursor = midIndex + 1,
 	mergeCursor = leftTempSize = rightTempSize = 0;
-	/* Merge elements from left and right halves until one is exhausted */
 	while (leftCursor <= midIndex && rightCursor <= highIndex)
-	{
+	{ /* Merge elements from left and right halves until one is exhausted */
 		if (array[leftCursor] <= array[rightCursor])
-			buffer[mergeCursor] = leftTempArray[leftTempSize] = array[leftCursor],
-			mergeCursor++, leftCursor++, leftTempSize++;
+			buffer[mergeCursor] = leftTempArray[leftTempSize] =
+			array[leftCursor], mergeCursor++, leftCursor++, leftTempSize++;
 		else
-			buffer[mergeCursor] = rightTempArray[rightTempSize] = array[rightCursor],
-			mergeCursor++, rightCursor++, rightTempSize++;
+			buffer[mergeCursor] = rightTempArray[rightTempSize] =
+			array[rightCursor], mergeCursor++, rightCursor++, rightTempSize++;
 	}
 	while (leftCursor <= midIndex) /* Copy remaining elements from left half */
-		buffer[mergeCursor] = leftTempArray[leftTempSize] = array[leftCursor],
+		buffer[mergeCursor] = leftTempArray[leftTempSize] =
+			array[leftCursor],
 		mergeCursor++, leftCursor++, leftTempSize++;
 	while (rightCursor <= highIndex) /* Copy remaining elements from right half */
-		buffer[mergeCursor] = rightTempArray[rightTempSize] = array[rightCursor],
+		buffer[mergeCursor] = rightTempArray[rightTempSize] =
+			array[rightCursor],
 		mergeCursor++, rightCursor++, rightTempSize++;
 	printf("[left]: ");
 	for (debugIdx = 0; debugIdx < leftTempSize; debugIdx++)
-	{	/* Debug output for the left temporary array */
+	{ /* Debug output for the left temporary array */
 		(debugIdx == 0) ? printf("%d", leftTempArray[debugIdx]) :
 		printf(", %d", leftTempArray[debugIdx]);
-	}
+	} /* Debug output for the right temporary array */
 	printf("\n[right]: ");
-	/* Debug output for the right temporary array */
 	for (debugIdx = 0; debugIdx < rightTempSize; debugIdx++)
 		(debugIdx == 0) ? printf("%d", rightTempArray[debugIdx]) :
 		printf(", %d", rightTempArray[debugIdx]);
 	printf("\n[Done]: ");
-	/* Finalize merging by copying sorted elements back to the original array */
 	for (leftCursor = lowIndex; leftCursor <= highIndex; leftCursor++)
-		array[leftCursor] = buffer[leftCursor - lowIndex],
+	{	array[leftCursor] = buffer[leftCursor - lowIndex],
 		printf("%d", array[leftCursor]);
-		(leftCursor != highIndex) ? printf(", ") : printf("\n");
+		if (leftCursor != highIndex)
+			printf(", ");
+		else
+			printf("\n");
+	}
 }
