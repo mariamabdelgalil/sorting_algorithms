@@ -16,8 +16,8 @@ int get_value(deck_node_t *card)
 		return (11);
 	if (strcmp(card->card->value, "Queen") == 0)
 		return (12);
-        if (strcmp(card->card->value, "King") == 0)
-                return (13);
+	if (strcmp(card->card->value, "King") == 0)
+		return (13);
 	return (card->card->value[0] - '0');
 }
 
@@ -54,7 +54,6 @@ void insertion_sort_deck_kind(deck_node_t **list)
 		}
 		node = node->next;
 	}
-
 }
 
 /**
@@ -63,35 +62,34 @@ void insertion_sort_deck_kind(deck_node_t **list)
  */
 void insertion_sort_deck_value(deck_node_t **list)
 {
-        deck_node_t *node = NULL, *tmp = NULL;
+	deck_node_t *node = NULL, *tmp = NULL;
 
-        if (list == NULL || *list == NULL || (*list)->next == NULL)
-                return;
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
+		return;
 
-        node = *list;
-        node = node->next;
-        while (node)
-        {
-                while (node->prev && node->card->kind == (node->prev)->card->kind
-				&& get_value(node) < get_value(node->prev))
-                {
-                        tmp = node;
-                        if (node->next)
-                                (node->next)->prev = node->prev;
-                        (node->prev)->next = node->next;
-                        node = node->prev;
-                        tmp->prev = node->prev;
-                        tmp->next = node;
-                        if (node->prev)
-                                (node->prev)->next = tmp;
-                        node->prev = tmp;
-                        if (tmp->prev == NULL)
-                                *list = tmp;
-                        node = node->prev;
-                }
-                node = node->next;
-        }
-
+	node = *list;
+	node = node->next;
+	while (node)
+	{
+		while (node->prev && node->card->kind ==
+		(node->prev)->card->kind && get_value(node) < get_value(node->prev))
+		{
+			tmp = node;
+			if (node->next)
+				(node->next)->prev = node->prev;
+			(node->prev)->next = node->next;
+			node = node->prev;
+			tmp->prev = node->prev;
+			tmp->next = node;
+			if (node->prev)
+				(node->prev)->next = tmp;
+			node->prev = tmp;
+			if (tmp->prev == NULL)
+				*list = tmp;
+			node = node->prev;
+		}
+		node = node->next;
+	}
 }
 
 /**
