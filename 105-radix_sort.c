@@ -2,89 +2,107 @@
 #include "sort.h"
 
 /**
- * radix_sort - Sorts an array of integers in ascending order using radix sort
- * @arr: The array to be sorted.
- * @size: The size of the array.
+ * distribute_data - auxiliary function of radix sort
+ * @array: array of data to be sorted
+ * @buffer: array of arrays to be sorted
+ * @size: size of the array
+ * @digit: digit to be sorted
  */
-void radix_sort(int *arr, size_t size)
+void distribute_data(int *array, int **buffer, int size, int digit)
+{
+	int index, position, currentValue, base = 10;
+	/* Initialize tally for counting occurrences of each digit */
+	int tally[10] = {0};
+	int secondTally[10] = {0}; /* Secondary tally for distribution */
+
+	for (index = 0; index < size; index++)
+	{
+		currentValue = array[index];
+		for (position = 0; position < digit; position++)
+			if (position > 0)
+				currentValue /= base; /* Reduce number by a factor of 10 */
+		currentValue %= base;		  /* Get the digit at the current place value */
+		buffer[currentValue][tally[currentValue]] = array[index];
+		tally[currentValue]++;
+	}
+
+	index = 0;
+	position = 0;
+	while (position < base)
+	{
+		while (tally[position] > 0)
+		{
+			array[index++] = buffer[position][secondTally[position]];
+			secondTally[position]++;
+			tally[position]--;
+		}
+		position++;
+	}
+
+	/* Print the sorted array */
+	print_array(array, size);
+}
+
+/**
+ * count_data - auxiliary function of radix sort
+ * @array: array of data to be sorted
+ * @size: size of data
+ * @digit: Current digit to distribute
+ */
+void count_data(int *array, int size, int digit)
+{
+	int frequency[10] = {0}; /* Array to keep track of digit frequencies */
+	int idx, digitIdx, number, base = 10, **digitBuckets;
+	/* Calculate frequency of each digit at the current place value */
+	for (idx = 0; idx < size; idx++)
+	{
+		number = array[idx]; /* Isolate the digit at 'digit' place */
+		for (digitIdx = 0; digitIdx < digit; digitIdx++)
+			if (digitIdx > 0)
+				number /= base; /* Reduce the number by a factor of base (10) */
+		number %= base;			/* Get the digit */
+		frequency[number]++;	/* Increment frequency count for this digit */
+	}
+	/* If all numbers have the same digit at the current place value, skip */
+	if (frequency[0] == size)
+		return;
+	/* Allocate buffer for digit sorting */
+	digitBuckets = malloc(sizeof(int *) * base);
+	if (!digitBuckets)
+		return;
+	/* Allocate space for each bucket based on frequency count */
+	idx = 0;
+	while (idx < base)
+	{
+		if (frequency[idx] > 0)
+			digitBuckets[idx] = malloc(sizeof(int) * frequency[idx]);
+		idx++;
+	}
+	/* Distribute the numbers into corresponding digit buckets */
+	distribute_data(array, digitBuckets, size, digit);
+	/* Recursively call count_data for the next digit place */
+	count_data(array, size, digit + 1);
+	/* Free the allocated memory for each non-empty bucket and the buffer */
+	idx = 0;
+	while (idx < base)
+	{
+		if (frequency[idx] > 0)
+			free(digitBuckets[idx]);
+		idx++;
+	}
+	free(digitBuckets);
+}
+
+/**
+ * radix_sort - Sorts an array of integers in ascending order
+ * using the radix sort algorithm
+ * @array: The array to be sorted
+ * @size: The size of the array
+ */
+
+void radix_sort(int *array, size_t size)
 {
 	if (size < 2)
 		return;
-	count_data(arr, size, 1);
-}
-
-/**
- * count_data - Counts occurrence of each digit for radix sort.
- * @arr: Array of data to be sorted.
- * @size: Size of data.
- * @digit: Current digit to distribute.
- */
-void count_data(int *arr, int size, int digit)
-{
-	int count_array[10] = {0};
-	int i, j, num, digit_count = 10, **buffer;
-
-	for (i = 0; i < size; i++)
-	{
-		num = arr[i];
-		for (j = 0; j < digit; j++)
-			if (j > 0)
-				num /= 10;
-		num %= 10;
-		count_array[num]++;
-	}
-
-	if (count_array[0] == size)
-		return;
-
-	buffer = malloc(sizeof(int *) * 10);
-	if (!buffer)
-		return;
-
-	for (i = 0; i < digit_count; i++)
-		if (count_array[i] != 0)
-			buffer[i] = malloc(sizeof(int) * count_array[i]);
-
-	distribute_data(arr, buffer, size, digit);
-
-	count_data(arr, size, digit + 1);
-
-	for (i = 0; i < digit_count; i++)
-		if (count_array[i] > 0)
-			free(buffer[i]);
-	free(buffer);
-}
-
-/**
- * distribute_data - Distributes digits to respective buffers for radix sort
- * @arr: Array of data to be sorted.
- * @buffer: Array of arrays to store sorted data.
- * @size: Size of the array.
- * @digit: Current digit to be sorted.
- */
-void distribute_data(int *arr, int **buffer, int size, int digit)
-{
-	int i, j, num, digit_count = 10;
-	int count_array[10] = {0};
-
-	for (i = 0; i < size; i++)
-	{
-		num = arr[i];
-		for (j = 0; j < digit; j++)
-			if (j > 0)
-				num /= 10;
-		num %= 10;
-		buffer[num][count_array[num]++] = arr[i];
-	}
-
-	for (i = 0, j = 0; i < digit_count; i++)
-	{
-		while (count_array[i] > 0)
-		{
-			arr[j] = buffer[i][--count_array[i]];
-			j++;
-		}
-	}
-
-	print_array(arr, size);
+	count_data(array, size, 1);
 }
