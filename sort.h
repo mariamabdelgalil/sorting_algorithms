@@ -40,7 +40,9 @@ void counting_sort(int *array, size_t size);
 void exchange_elements(int *arr, int idx1, int idx2, const int pri_Size);
 void find_largest(int *arr, size_t size, int idx, const int pri_Size);
 void heap_sort(int *arr, size_t size);
-
+void radix_sort(int *arr, size_t size);
+void count_data(int *arr, int size, int digit);
+void distribute_data(int *arr, int **buffer, int size, int digit);
 void Range(int *array, int start, int end);
 void swap(int *array, int index1, int index2, int dir);
 void merge_Bit(int *array, int low, int size, int dir, const int arraySize);
