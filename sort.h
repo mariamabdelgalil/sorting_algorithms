@@ -37,5 +37,8 @@ void cocktail_sort_list(listint_t **list);
 int findMaximum(int *array, size_t size);
 int *initializeZeroArray(int size);
 void counting_sort(int *array, size_t size);
+void exchange_elements(int *arr, int idx1, int idx2, const int pri_Size);
+void find_largest(int *arr, size_t size, int idx, const int pri_Size);
+void heap_sort(int *arr, size_t size);
 
 #endif
