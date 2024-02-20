@@ -29,4 +29,9 @@ void merge_array(int *array, int lowIndex,
 int midIndex, int highIndex, int *buffer);
 void merge_rec(int *array, int low, int high, int *temp_buffer);
 void merge_sort(int *arr, size_t len);
+void swapNodes(listint_t **head, listint_t *node1, listint_t *node2);
+void bubbleUp(listint_t **list, listint_t **leftBound,
+listint_t *rightBound, int *swapped);
+void bubbleDown(listint_t **list, listint_t **leftBound, int *swapped);
+void cocktail_sort_list(listint_t **list);
 #endif
